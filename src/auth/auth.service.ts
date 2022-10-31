@@ -25,7 +25,6 @@ export class AuthService {
         },
       });
       const tokens = await this.getTokens(user.id, user.email);
-      await this.updateRthash(user.id, tokens.refresh_token);
       return tokens;
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {
@@ -47,7 +46,6 @@ export class AuthService {
     const comparePass = await argon.verify(user.hash, dto.password);
     if (!comparePass) throw new ForbiddenException('Password is wrong');
     const tokens = await this.getTokens(user.id, user.email);
-    await this.updateRthash(user.id, tokens.refresh_token);
     return tokens;
   }
 
@@ -79,15 +77,15 @@ export class AuthService {
     };
   }
 
-  async updateRthash(userId: number, refreshToken: string): Promise<void> {
-    const hash = await argon.hash(refreshToken);
-    await this.prisma.user.update({
-      where: {
-        id: userId,
-      },
-      data: {
-        hashedRt: hash,
-      },
-    });
-  }
+  // async updateRthash(userId: number, refreshToken: string): Promise<void> {
+  //   const hash = await argon.hash(refreshToken);
+  //   await this.prisma.user.update({
+  //     where: {
+  //       id: userId,
+  //     },
+  //     data: {
+  //       hashedRt: hash,
+  //     },
+  //   });
+  // }
 }

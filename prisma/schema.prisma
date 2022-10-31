@@ -13,10 +13,10 @@ datasource db {
 model User {
   id Int @id @default(autoincrement())
 
-  email    String  @unique
-  nickname String  @unique
+  email    String @unique
+  nickname String @unique
   hash     String
-  hashedRt String?
+  // hashedRt String?
 
   firstName  String?
   secondName String?
